@@ -1,5 +1,5 @@
 import pygame
-import lib.PlayerClasses
+from lib import PlayerClasses, EnemyClasses
 
 pygame.init()
 
@@ -12,11 +12,14 @@ running = True
 clock = pygame.time.Clock()
 
 #initialize player
-player = lib.PlayerClasses.Player(1,1,1.0,1.0,[WIDTH,HEIGHT])
+player = PlayerClasses.Player(1,1,1.0,1.0,[WIDTH,HEIGHT])
 player_group = pygame.sprite.Group()
 player_group.add(player)
 bullet_group = pygame.sprite.Group()
 
+#dummy enemy for testing
+enemy_group = pygame.sprite.Group()
+enemy_group.add(EnemyClasses.Dummy([100,50],1,(WIDTH/2,HEIGHT/2)))
 
 while running:
     #input map
@@ -34,6 +37,9 @@ while running:
 
     bullet_group.update()
     bullet_group.draw(screen)
+
+    enemy_group.update()
+    enemy_group.draw(screen)
 
     pygame.display.flip()
     clock.tick(60)

@@ -5,7 +5,7 @@ import math
 
 #player
 class Player(pygame.sprite.Sprite):
-    def __init__(self, hp:int,dmg:int,attspd:float,bulspd:float,pos:list) -> None:
+    def __init__(self, hp:int, dmg:int, attspd:float, bulspd:float, pos:list) -> None:
         pygame.sprite.Sprite.__init__(self)
         self.original_image = pygame.image.load('img/PlayerImage.png')
         self.image = pygame.image.load('img/PlayerImage.png')
@@ -27,7 +27,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=self.rect.center)
 
     def fire(self, bulgrp:pygame.sprite.Group):
-        bulgrp.add(Bullet(1,1,self.rect.center))
+        bulgrp.add(Bullet(self.BULLETSPEED,self.DAMAGE,self.rect.center))
 
 
 #bullet
