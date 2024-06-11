@@ -5,7 +5,7 @@ import math
 
 #player
 class Player(pygame.sprite.Sprite):
-    def __init__(self, hp:int, dmg:int, attspd:float, bulspd:float, pos:list) -> None:
+    def __init__(self, hp:int, dmg:int, attspd:int, bulspd:float, pos:list) -> None:
         pygame.sprite.Sprite.__init__(self)
         self.original_image = pygame.image.load('img/PlayerImage.png')
         self.image = pygame.image.load('img/PlayerImage.png')
@@ -17,6 +17,7 @@ class Player(pygame.sprite.Sprite):
         self.HEALTH = hp
         self.DAMAGE = dmg
         self.ATTACKSPEED = attspd
+        self.delay = 0
         self.BULLETSPEED = bulspd
 
     def update(self):
@@ -26,8 +27,15 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.rotate(self.original_image, angle)
         self.rect = self.image.get_rect(center=self.rect.center)
 
+        if self.delay:
+            self.delay -= 1
+
     def fire(self, bulgrp:pygame.sprite.Group):
-        bulgrp.add(Bullet(self.BULLETSPEED,self.DAMAGE,self.rect.center))
+        if self.delay:
+            pass
+        else:
+            bulgrp.add(Bullet(self.BULLETSPEED,self.DAMAGE,self.rect.center))
+            self.delay = self.ATTACKSPEED
 
 
 #bullet

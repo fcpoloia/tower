@@ -12,14 +12,14 @@ running = True
 clock = pygame.time.Clock()
 
 #initialize player
-player = PlayerClasses.Player(1,1,1.0,1.0,[WIDTH,HEIGHT])
+player = PlayerClasses.Player(1,1,100,1.0,[WIDTH,HEIGHT])
 player_group = pygame.sprite.Group()
 player_group.add(player)
 bullet_group = pygame.sprite.Group()
 
 #dummy enemy for testing
 enemy_group = pygame.sprite.Group()
-enemy_group.add(EnemyClasses.Dummy([100,50],1,(WIDTH/2,HEIGHT/2)))
+enemy_group.add(EnemyClasses.Dummy([100,50],1,(WIDTH/2,HEIGHT/2),2))
 
 while running:
     #input map
@@ -28,6 +28,23 @@ while running:
             running = False
         elif event.type == pygame.KEYDOWN:
             player.fire(bullet_group)
+
+    #collision detection
+    player_hit = pygame.sprite.spritecollide(player, enemy_group, False)
+    for i in player_hit:
+        player.HEALTH -= 1
+        enemy_group.remove(i)
+
+    bullet_hits = pygame.sprite.groupcollide(bullet_group, enemy_group, False, False)
+    for bullet in bullet_hits:
+        for enemy in bullet_hits[bullet]:
+            enemy.HP -= bullet.DAMAGE
+        bullet_group.remove(bullet)
+
+    #check for enemies to kill off
+    for i in enemy_group.sprites():
+        if i.HP <= 0:
+            enemy_group.remove(i)
 
     #Update & draw
     screen.fill((100, 100, 100))
