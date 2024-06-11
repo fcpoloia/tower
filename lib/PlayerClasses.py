@@ -40,6 +40,8 @@ class Bullet(pygame.sprite.Sprite):
         self.original_image = pygame.transform.scale(self.original_image, (10,20))
         self.rect = self.image.get_rect()
         self.rect.center = pos
+        self.angle = 0
+        self.position = pygame.Vector2(self.rect.center)
 
         mouse_x, mouse_y = pygame.mouse.get_pos()
         rel_x, rel_y = mouse_x - self.rect.centerx, mouse_y - self.rect.centery
@@ -52,6 +54,7 @@ class Bullet(pygame.sprite.Sprite):
         self.DAMAGE = dmg
 
     def update(self):
-        self.rect.center += self.DIRECTION * self.SPEED
+        self.position += self.DIRECTION * self.SPEED
+        self.rect.center = self.position
         
         
