@@ -1,0 +1,57 @@
+import pygame
+import math
+
+###-------------------------------CLASSES-------------------------------###
+
+#player
+class Player(pygame.sprite.Sprite):
+    def __init__(self, hp:int,dmg:int,attspd:float,bulspd:float,pos:list) -> None:
+        pygame.sprite.Sprite.__init__(self)
+        self.original_image = pygame.image.load('img/PlayerImage.png')
+        self.image = pygame.image.load('img/PlayerImage.png')
+        self.image = pygame.transform.scale(self.image, (40,40))
+        self.original_image = pygame.transform.scale(self.original_image, (40,40))
+        self.rect = self.image.get_rect()
+        self.rect.center = (pos[0]/2,pos[1]/2)
+
+        self.HEALTH = hp
+        self.DAMAGE = dmg
+        self.ATTACKSPEED = attspd
+        self.BULLETSPEED = bulspd
+
+    def update(self):
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        rel_x, rel_y = mouse_x - self.rect.centerx, mouse_y - self.rect.centery
+        angle = ((180 / math.pi) * -math.atan2(rel_y, rel_x)) - 90
+        self.image = pygame.transform.rotate(self.original_image, angle)
+        self.rect = self.image.get_rect(center=self.rect.center)
+
+    def fire(self, bulgrp:pygame.sprite.Group):
+        bulgrp.add(Bullet(1,1,self.rect.center))
+
+
+#bullet
+class Bullet(pygame.sprite.Sprite):
+    def __init__(self, spd:int, dmg:int, pos) -> None:
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load("img/BulletImage.png")
+        self.image = pygame.transform.scale(self.image, (10,20))
+        self.original_image = pygame.image.load("img/BulletImage.png")
+        self.original_image = pygame.transform.scale(self.original_image, (10,20))
+        self.rect = self.image.get_rect()
+        self.rect.center = pos
+
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        rel_x, rel_y = mouse_x - self.rect.centerx, mouse_y - self.rect.centery
+        angle = ((180 / math.pi) * -math.atan2(rel_y, rel_x)) - 90
+        self.image = pygame.transform.rotate(self.original_image, angle)
+        self.rect = self.image.get_rect(center=self.rect.center)
+        self.DIRECTION = pygame.Vector2(rel_x, rel_y).normalize()
+
+        self.SPEED = spd
+        self.DAMAGE = dmg
+
+    def update(self):
+        self.rect.center += self.DIRECTION * self.SPEED
+        
+        
