@@ -14,24 +14,12 @@ class Dummy(pygame.sprite.Sprite):
         self.TRGT = target
         self.SPD = speed
         self.HP = health
+        self.dir_vector = pygame.Vector2(self.TRGT[0] - self.rect.centerx, self.TRGT[1] - self.rect.centery).normalize()
+        self.position = pygame.Vector2(self.rect.center)
 
     def update(self):
-        target_x, target_y = self.TRGT
-        current_x, current_y = self.rect.center
-        distance_x = target_x - current_x
-        distance_y = target_y - current_y
-        distance = math.sqrt(distance_x ** 2 + distance_y ** 2)
-        if distance != 0:
-            direction_x = distance_x / distance
-            direction_y = distance_y / distance
-            move_x = direction_x * self.SPD
-            move_y = direction_y * self.SPD
-            if abs(move_x) > abs(distance_x):
-                move_x = distance_x
-            if abs(move_y) > abs(distance_y):
-                move_y = distance_y
-            self.rect.x += move_x
-            self.rect.y += move_y
+        self.position += self.dir_vector * self.SPD
+        self.rect.center = self.position
 
         
 

@@ -1,5 +1,6 @@
 import pygame
 from lib import PlayerClasses, EnemyClasses
+import random
 
 pygame.init()
 
@@ -19,7 +20,7 @@ bullet_group = pygame.sprite.Group()
 
 #dummy enemy for testing
 enemy_group = pygame.sprite.Group()
-enemy_group.add(EnemyClasses.Dummy([100,50],1,(WIDTH/2,HEIGHT/2),2))
+enemy_group.add(EnemyClasses.Dummy([100,50],1,(WIDTH//2,HEIGHT//2),2))
 
 while running:
     #input map
@@ -42,9 +43,19 @@ while running:
         bullet_group.remove(bullet)
 
     #check for enemies to kill off
-    for i in enemy_group.sprites():
-        if i.HP <= 0:
-            enemy_group.remove(i)
+    if enemy_group.sprites():
+        for i in enemy_group.sprites():
+            if i.HP <= 0:
+                enemy_group.remove(i)
+    #spawn new enemy
+    else:
+        sides = ["L","R","U","D"]
+        side = random.choice(sides)
+        if side == "L":enemy_group.add(EnemyClasses.Dummy([50,random.randint(0,HEIGHT)],1,(WIDTH/2,HEIGHT/2),2))
+        if side == "R":enemy_group.add(EnemyClasses.Dummy([950,random.randint(0,HEIGHT)],1,(WIDTH/2,HEIGHT/2),2))
+        if side == "U":enemy_group.add(EnemyClasses.Dummy([random.randint(0,WIDTH),50],1,(WIDTH/2,HEIGHT/2),2))
+        if side == "D":enemy_group.add(EnemyClasses.Dummy([random.randint(0,WIDTH),650],1,(WIDTH/2,HEIGHT/2),2))
+
 
     #Update & draw
     screen.fill((100, 100, 100))
