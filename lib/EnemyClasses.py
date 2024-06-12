@@ -2,7 +2,7 @@ import pygame
 import math
 
 class Dummy(pygame.sprite.Sprite):
-    def __init__(self, position: list[int,int], speed:int, target, health:int):
+    def __init__(self, position: list[int,int], speed:float, target, health:int):
         pygame.sprite.Sprite.__init__(self)
 
         self.image = pygame.Surface((30,30))
@@ -26,6 +26,13 @@ class Conscript(Dummy):
         super().__init__(position, 1, target, 1)
         self.image = pygame.image.load("img/conscript.png")
         self.image = pygame.transform.scale(self.image,(30,30))
+        self.rect = self.image.get_rect()
+
+class Tank(Dummy):
+    def __init__(self, position: list[int], target):
+        super().__init__(position, .3, target, 5)
+        self.image = pygame.image.load("img/Tank.png")
+        self.image = pygame.transform.scale(self.image,(50,50))
         self.rect = self.image.get_rect()
 
 

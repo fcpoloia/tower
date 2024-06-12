@@ -19,7 +19,7 @@ player_group.add(player)
 bullet_group = pygame.sprite.Group()
 
 #Enemies
-pos_enemies = [EnemyClasses.Conscript]
+pos_enemies = [EnemyClasses.Conscript, EnemyClasses.Tank]
 enemy_group = pygame.sprite.Group()
 enemy_group.add(EnemyClasses.Conscript([100,50],(WIDTH//2,HEIGHT//2)))
 sides = ["L","R","U","D"]
