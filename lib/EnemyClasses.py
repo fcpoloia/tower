@@ -21,7 +21,13 @@ class Dummy(pygame.sprite.Sprite):
         self.position += self.dir_vector * self.SPD
         self.rect.center = self.position
 
-        
+class Conscript(Dummy):
+    def __init__(self, position: list[int], target):
+        super().__init__(position, 1, target, 1)
+        self.image = pygame.image.load("img/conscript.png")
+        self.image = pygame.transform.scale(self.image,(30,30))
+        self.rect = self.image.get_rect()
+
 
 
         

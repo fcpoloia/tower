@@ -18,9 +18,11 @@ player_group = pygame.sprite.Group()
 player_group.add(player)
 bullet_group = pygame.sprite.Group()
 
-#dummy enemy for testing
+#Enemies
+pos_enemies = [EnemyClasses.Conscript]
 enemy_group = pygame.sprite.Group()
-enemy_group.add(EnemyClasses.Dummy([100,50],1,(WIDTH//2,HEIGHT//2),2))
+enemy_group.add(EnemyClasses.Conscript([100,50],(WIDTH//2,HEIGHT//2)))
+sides = ["L","R","U","D"]
 
 while running:
     #input map
@@ -49,12 +51,12 @@ while running:
                 enemy_group.remove(i)
     #spawn new enemy
     else:
-        sides = ["L","R","U","D"]
+        enemy = random.choice(pos_enemies)
         side = random.choice(sides)
-        if side == "L":enemy_group.add(EnemyClasses.Dummy([50,random.randint(0,HEIGHT)],1,(WIDTH/2,HEIGHT/2),2))
-        if side == "R":enemy_group.add(EnemyClasses.Dummy([950,random.randint(0,HEIGHT)],1,(WIDTH/2,HEIGHT/2),2))
-        if side == "U":enemy_group.add(EnemyClasses.Dummy([random.randint(0,WIDTH),50],1,(WIDTH/2,HEIGHT/2),2))
-        if side == "D":enemy_group.add(EnemyClasses.Dummy([random.randint(0,WIDTH),650],1,(WIDTH/2,HEIGHT/2),2))
+        if side == "L":enemy_group.add(enemy([50,random.randint(0,HEIGHT)],(WIDTH/2,HEIGHT/2)))
+        if side == "R":enemy_group.add(enemy([950,random.randint(0,HEIGHT)],(WIDTH/2,HEIGHT/2)))
+        if side == "U":enemy_group.add(enemy([random.randint(0,WIDTH),50],(WIDTH/2,HEIGHT/2)))
+        if side == "D":enemy_group.add(enemy([random.randint(0,WIDTH),650],(WIDTH/2,HEIGHT/2)))
 
 
     #Update & draw
