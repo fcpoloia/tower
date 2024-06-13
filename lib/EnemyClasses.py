@@ -22,18 +22,22 @@ class Dummy(pygame.sprite.Sprite):
         self.rect.center = self.position
 
 class Conscript(Dummy):
-    def __init__(self, position: list[int], target):
+    def __init__(self, position: list[int], target, mid:int):
         super().__init__(position, 1, target, 1)
         self.image = pygame.image.load("img/conscript.png")
         self.image = pygame.transform.scale(self.image,(30,30))
         self.rect = self.image.get_rect()
+        if position[0] < mid:
+            self.image = pygame.transform.flip(self.image, True, False) 
 
 class Tank(Dummy):
-    def __init__(self, position: list[int], target):
+    def __init__(self, position: list[int], target, mid:int):
         super().__init__(position, .3, target, 5)
         self.image = pygame.image.load("img/Tank.png")
         self.image = pygame.transform.scale(self.image,(50,50))
         self.rect = self.image.get_rect()
+        if position[0] < mid:
+            self.image = pygame.transform.flip(self.image, True, False)
 
 
 
