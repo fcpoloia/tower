@@ -1,6 +1,7 @@
 import pygame
 from lib import PlayerClasses, EnemyClasses
 import random
+import sys
 
 pygame.init()
 
@@ -9,7 +10,7 @@ WIDTH: int = 1000
 HEIGHT: int = 700
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("My Game")
-running = True
+state = 'running'
 clock = pygame.time.Clock()
 
 # initialize player
@@ -24,11 +25,13 @@ enemy_group = pygame.sprite.Group()
 enemy_group.add(EnemyClasses.Conscript([100, 50], (WIDTH // 2, HEIGHT // 2), WIDTH / 2))
 sides = ["L", "R", "U", "D"]
 
-while running:
+wave = 0
+
+while state == 'running':
     # input map
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
+            sys.exit()
         elif event.type == pygame.KEYDOWN:
             player.fire(bullet_group)
 
@@ -51,32 +54,35 @@ while running:
                 enemy_group.remove(i)
     # spawn new enemy
     else:
-        enemy = random.choice(pos_enemies)
-        side = random.choice(sides)
-        if side == "L":
-            enemy_group.add(
-                enemy(
-                    [50, random.randint(0, HEIGHT)], (WIDTH / 2, HEIGHT / 2), WIDTH / 2
+        for i in range(wave):
+            enemy = random.choice(pos_enemies)
+            side = random.choice(sides)
+            if side == "L":
+                enemy_group.add(
+                    enemy(
+                        [50, random.randint(0, HEIGHT)], (WIDTH / 2, HEIGHT / 2), WIDTH / 2
+                    )
                 )
-            )
-        if side == "R":
-            enemy_group.add(
-                enemy(
-                    [950, random.randint(0, HEIGHT)], (WIDTH / 2, HEIGHT / 2), WIDTH / 2
+            if side == "R":
+                enemy_group.add(
+                    enemy(
+                        [950, random.randint(0, HEIGHT)], (WIDTH / 2, HEIGHT / 2), WIDTH / 2
+                    )
                 )
-            )
-        if side == "U":
-            enemy_group.add(
-                enemy(
-                    [random.randint(0, WIDTH), 50], (WIDTH / 2, HEIGHT / 2), WIDTH / 2
+            if side == "U":
+                enemy_group.add(
+                    enemy(
+                        [random.randint(0, WIDTH), 50], (WIDTH / 2, HEIGHT / 2), WIDTH / 2
+                    )
                 )
-            )
-        if side == "D":
-            enemy_group.add(
-                enemy(
-                    [random.randint(0, WIDTH), 650], (WIDTH / 2, HEIGHT / 2), WIDTH / 2
+            if side == "D":
+                enemy_group.add(
+                    enemy(
+                        [random.randint(0, WIDTH), 650], (WIDTH / 2, HEIGHT / 2), WIDTH / 2
+                    )
                 )
-            )
+        wave += 1
+        
 
     # check for bullets out of bounds
     for bullet in bullet_group.sprites():
