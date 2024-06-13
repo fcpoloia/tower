@@ -3,16 +3,19 @@ import math
 
 ###-------------------------------CLASSES-------------------------------###
 
-#player
+
+# player
 class Player(pygame.sprite.Sprite):
-    def __init__(self, hp:int, dmg:int, attspd:int, bulspd:float, pos:list) -> None:
+    def __init__(
+        self, hp: int, dmg: int, attspd: int, bulspd: float, pos: list
+    ) -> None:
         pygame.sprite.Sprite.__init__(self)
-        self.original_image = pygame.image.load('img/PlayerImage.png')
-        self.image = pygame.image.load('img/PlayerImage.png')
-        self.image = pygame.transform.scale(self.image, (40,40))
-        self.original_image = pygame.transform.scale(self.original_image, (40,40))
+        self.original_image = pygame.image.load("img/PlayerImage.png")
+        self.image = pygame.image.load("img/PlayerImage.png")
+        self.image = pygame.transform.scale(self.image, (40, 40))
+        self.original_image = pygame.transform.scale(self.original_image, (40, 40))
         self.rect = self.image.get_rect()
-        self.rect.center = (pos[0]/2,pos[1]/2)
+        self.rect.center = (pos[0] / 2, pos[1] / 2)
 
         self.HEALTH = hp
         self.DAMAGE = dmg
@@ -30,22 +33,22 @@ class Player(pygame.sprite.Sprite):
         if self.delay:
             self.delay -= 1
 
-    def fire(self, bulgrp:pygame.sprite.Group):
+    def fire(self, bulgrp: pygame.sprite.Group):
         if self.delay:
             pass
         else:
-            bulgrp.add(Bullet(self.BULLETSPEED,self.DAMAGE,self.rect.center))
+            bulgrp.add(Bullet(self.BULLETSPEED, self.DAMAGE, self.rect.center))
             self.delay = self.ATTACKSPEED
 
 
-#bullet
+# bullet
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, spd:int, dmg:int, pos) -> None:
+    def __init__(self, spd: int, dmg: int, pos) -> None:
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load("img/BulletImage.png")
-        self.image = pygame.transform.scale(self.image, (10,20))
+        self.image = pygame.transform.scale(self.image, (10, 20))
         self.original_image = pygame.image.load("img/BulletImage.png")
-        self.original_image = pygame.transform.scale(self.original_image, (10,20))
+        self.original_image = pygame.transform.scale(self.original_image, (10, 20))
         self.rect = self.image.get_rect()
         self.rect.center = pos
         self.angle = 0
@@ -64,5 +67,3 @@ class Bullet(pygame.sprite.Sprite):
     def update(self):
         self.position += self.DIRECTION * self.SPEED
         self.rect.center = self.position
-        
-        

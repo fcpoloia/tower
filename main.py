@@ -19,9 +19,9 @@ player_group.add(player)
 bullet_group = pygame.sprite.Group()
 
 # Enemies
-pos_enemies = [EnemyClasses.Conscript, EnemyClasses.Tank]
+pos_enemies = [EnemyClasses.Conscript, EnemyClasses.Tank, EnemyClasses.Runner]
 enemy_group = pygame.sprite.Group()
-enemy_group.add(EnemyClasses.Conscript([100, 50], (WIDTH // 2, HEIGHT // 2),WIDTH/2))
+enemy_group.add(EnemyClasses.Conscript([100, 50], (WIDTH // 2, HEIGHT // 2), WIDTH / 2))
 sides = ["L", "R", "U", "D"]
 
 while running:
@@ -55,19 +55,27 @@ while running:
         side = random.choice(sides)
         if side == "L":
             enemy_group.add(
-                enemy([50, random.randint(0, HEIGHT)], (WIDTH / 2, HEIGHT / 2), WIDTH/2)
+                enemy(
+                    [50, random.randint(0, HEIGHT)], (WIDTH / 2, HEIGHT / 2), WIDTH / 2
+                )
             )
         if side == "R":
             enemy_group.add(
-                enemy([950, random.randint(0, HEIGHT)], (WIDTH / 2, HEIGHT / 2), WIDTH/2)
+                enemy(
+                    [950, random.randint(0, HEIGHT)], (WIDTH / 2, HEIGHT / 2), WIDTH / 2
+                )
             )
         if side == "U":
             enemy_group.add(
-                enemy([random.randint(0, WIDTH), 50], (WIDTH / 2, HEIGHT / 2), WIDTH/2)
+                enemy(
+                    [random.randint(0, WIDTH), 50], (WIDTH / 2, HEIGHT / 2), WIDTH / 2
+                )
             )
         if side == "D":
             enemy_group.add(
-                enemy([random.randint(0, WIDTH), 650], (WIDTH / 2, HEIGHT / 2), WIDTH/2)
+                enemy(
+                    [random.randint(0, WIDTH), 650], (WIDTH / 2, HEIGHT / 2), WIDTH / 2
+                )
             )
 
     # check for bullets out of bounds
