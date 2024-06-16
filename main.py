@@ -1,6 +1,7 @@
 import pygame
-from lib import PlayerClasses, EnemyClasses
+from lib import PlayerClasses, EnemyClasses, upgrade
 import random
+import sys
 
 pygame.init()
 
@@ -10,6 +11,7 @@ HEIGHT: int = 700
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("My Game")
 running = True
+state = "fight"
 clock = pygame.time.Clock()
 
 # initialize player
@@ -21,14 +23,18 @@ bullet_group = pygame.sprite.Group()
 # Enemies
 pos_enemies = [EnemyClasses.Conscript, EnemyClasses.Tank, EnemyClasses.Runner]
 enemy_group = pygame.sprite.Group()
-enemy_group.add(EnemyClasses.Conscript([100, 50], (WIDTH // 2, HEIGHT // 2), WIDTH / 2))
 sides = ["L", "R", "U", "D"]
 
-while running:
+wave = 0
+str_card = upgrade.str_upgrade_card(150,300)
+cards = pygame.sprite.Group()
+cards.add(str_card)
+
+while state == "fight":
     # input map
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
+            sys.exit()
         elif event.type == pygame.KEYDOWN:
             player.fire(bullet_group)
 
@@ -51,32 +57,36 @@ while running:
                 enemy_group.remove(i)
     # spawn new enemy
     else:
-        enemy = random.choice(pos_enemies)
-        side = random.choice(sides)
-        if side == "L":
-            enemy_group.add(
-                enemy(
-                    [50, random.randint(0, HEIGHT)], (WIDTH / 2, HEIGHT / 2), WIDTH / 2
+        for i in range(wave):
+            enemy = random.choice(pos_enemies)
+            side = random.choice(sides)
+            if side == "L":
+                enemy_group.add(
+                    enemy(
+                        [50, random.randint(0, HEIGHT)], (WIDTH / 2, HEIGHT / 2), WIDTH / 2
+                    )
                 )
-            )
-        if side == "R":
-            enemy_group.add(
-                enemy(
-                    [950, random.randint(0, HEIGHT)], (WIDTH / 2, HEIGHT / 2), WIDTH / 2
+            if side == "R":
+                enemy_group.add(
+                    enemy(
+                        [950, random.randint(0, HEIGHT)], (WIDTH / 2, HEIGHT / 2), WIDTH / 2
+                    )
                 )
-            )
-        if side == "U":
-            enemy_group.add(
-                enemy(
-                    [random.randint(0, WIDTH), 50], (WIDTH / 2, HEIGHT / 2), WIDTH / 2
+            if side == "U":
+                enemy_group.add(
+                    enemy(
+                        [random.randint(0, WIDTH), 50], (WIDTH / 2, HEIGHT / 2), WIDTH / 2
+                    )
                 )
-            )
-        if side == "D":
-            enemy_group.add(
-                enemy(
-                    [random.randint(0, WIDTH), 650], (WIDTH / 2, HEIGHT / 2), WIDTH / 2
+            if side == "D":
+                enemy_group.add(
+                    enemy(
+                        [random.randint(0, WIDTH), 650], (WIDTH / 2, HEIGHT / 2), WIDTH / 2
+                    )
                 )
-            )
+        wave += 1
+        if wave > 2:
+            state = "buff"
 
     # check for bullets out of bounds
     for bullet in bullet_group.sprites():
@@ -102,5 +112,22 @@ while running:
 
     pygame.display.flip()
     clock.tick(60)
+
+    while state == "buff":
+        #input map
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                M_POS = event.pos
+                if str_card.rect.collidepoint(M_POS):
+                    player.DAMAGE =+ 1
+                    state = "fight"
+ 
+        cards.update()
+        cards.draw(screen)
+        
+        pygame.display.flip()
+        clock.tick(60)
 
 pygame.quit()
