@@ -39,11 +39,12 @@ class Player(pygame.sprite.Sprite):
         else:
             bulgrp.add(Bullet(self.BULLETSPEED, self.DAMAGE, self.rect.center))
             self.delay = self.ATTACKSPEED
-
+        if self.delay < 0:
+            self.delay = 0
 
 # bullet
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, spd: int, dmg: int, pos) -> None:
+    def __init__(self, spd: float, dmg: int, pos) -> None:
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load("img/BulletImage.png")
         self.image = pygame.transform.scale(self.image, (10, 20))

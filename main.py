@@ -7,7 +7,7 @@ pygame.init()
 
 # constants
 WIDTH: int = 1000
-HEIGHT: int = 700
+HEIGHT: int = 650
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("My Game")
 running = True
@@ -26,9 +26,12 @@ enemy_group = pygame.sprite.Group()
 sides = ["L", "R", "U", "D"]
 
 wave = 0
-str_card = upgrade.str_upgrade_card(150,300)
+L:int = 150
+M:int = 500
+R:int = 850
+sequance = [L,M,R]
+pos_cards = [upgrade.str_upgrade_card,upgrade.frr_upgrade_card,upgrade.bsp_upgrade_card]
 cards = pygame.sprite.Group()
-cards.add(str_card)
 
 while state == "fight":
     # input map
@@ -87,6 +90,8 @@ while state == "fight":
         wave += 1
         if wave > 2:
             state = "buff"
+            for i in range(3):
+                cards.add(random.choice(pos_cards)(sequance[i],300))
 
     # check for bullets out of bounds
     for bullet in bullet_group.sprites():
@@ -114,14 +119,16 @@ while state == "fight":
     clock.tick(60)
 
     while state == "buff":
+        
         #input map
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 M_POS = event.pos
-                if str_card.rect.collidepoint(M_POS):
-                    player.DAMAGE =+ 1
+                clicked_card = [c for c in cards if c.rect.collidepoint(M_POS)]
+                if clicked_card:
+                    clicked_card[0].upgrd(player)
                     state = "fight"
  
         cards.update()
