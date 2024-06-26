@@ -1,9 +1,10 @@
 import pygame
-from lib import PlayerClasses, EnemyClasses, upgrade
+from lib import PlayerClasses, EnemyClasses, upgrade, HUD
 import random
 import sys
 
 pygame.init()
+pygame.font.init()
 
 # constants
 WIDTH: int = 1000
@@ -25,13 +26,18 @@ pos_enemies = [EnemyClasses.Conscript, EnemyClasses.Tank, EnemyClasses.Runner]
 enemy_group = pygame.sprite.Group()
 sides = ["L", "R", "U", "D"]
 
-wave = 0
+# Cards
+wave = -1
 L:int = 150
 M:int = 500
 R:int = 850
 sequance = [L,M,R]
 pos_cards = [upgrade.str_upgrade_card,upgrade.frr_upgrade_card,upgrade.bsp_upgrade_card]
 cards = pygame.sprite.Group()
+
+# HUD
+font = pygame.font.SysFont("Arial", 30)
+wave_display_surf = font.render("Wave: " + str(wave), True, (255,255,255))
 
 while state == "fight":
     # input map
@@ -60,7 +66,7 @@ while state == "fight":
                 enemy_group.remove(i)
     # spawn new enemy
     else:
-        for i in range(wave):
+        for i in range(wave+1):
             enemy = random.choice(pos_enemies)
             side = random.choice(sides)
             if side == "L":
@@ -88,7 +94,8 @@ while state == "fight":
                     )
                 )
         wave += 1
-        if wave > 2:
+        wave_display_surf = font.render("Wave: "+str(wave), True, (255,255,255))
+        if wave > 1:
             state = "buff"
             for i in range(3):
                 cards.add(random.choice(pos_cards)(sequance[i],300))
@@ -114,6 +121,8 @@ while state == "fight":
 
     enemy_group.update()
     enemy_group.draw(screen)
+
+    screen.blit(wave_display_surf, (WIDTH/2,HEIGHT/2+50))
 
     pygame.display.flip()
     clock.tick(60)
