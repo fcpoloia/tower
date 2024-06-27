@@ -28,9 +28,9 @@ sides = ["L", "R", "U", "D"]
 
 # Cards
 wave = -1
-L:int = 150
-M:int = 500
-R:int = 850
+L:float = WIDTH/5
+M:float = WIDTH/2
+R:float = WIDTH-WIDTH/5
 sequance = [L,M,R]
 pos_cards = [upgrade.str_upgrade_card,upgrade.frr_upgrade_card,upgrade.bsp_upgrade_card]
 cards = pygame.sprite.Group()
