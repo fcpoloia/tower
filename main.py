@@ -44,9 +44,9 @@ while state == "fight":
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
-        elif event.type == pygame.KEYDOWN:
+        keys = pygame.key.get_pressed()
+        if any(keys):
             player.fire(bullet_group)
-
     # collision detection
     player_hit = pygame.sprite.spritecollide(player, enemy_group, False)
     for i in player_hit:
