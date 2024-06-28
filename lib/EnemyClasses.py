@@ -1,6 +1,13 @@
 import pygame
 import pygame.locals
 
+class Gibs(pygame.sprite.Sprite):
+    def __init__(self, position: list[int,int]):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load("img/gibs.png")
+        self.image = pygame.transform.scale(self.image, (30, 30))
+        self.rect = self.image.get_rect()
+        self.rect.center = (position[0],position[1])
 
 class Dummy(pygame.sprite.Sprite):
     def __init__(self, position: list[int, int], speed: float, target, health: int):
@@ -23,6 +30,9 @@ class Dummy(pygame.sprite.Sprite):
     def update(self):
         self.position += self.dir_vector * self.SPD
         self.rect.center = self.position
+
+    def die(self,gibgroup):
+        gibgroup.add(Gibs([self.rect.centerx,self.rect.centery]))
 
 
 class Conscript(Dummy):

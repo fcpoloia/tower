@@ -25,9 +25,10 @@ bullet_group = pygame.sprite.Group()
 pos_enemies = [EnemyClasses.Conscript, EnemyClasses.Tank, EnemyClasses.Runner]
 enemy_group = pygame.sprite.Group()
 sides = ["L", "R", "U", "D"]
+gibgroup = pygame.sprite.Group()
 
 # Cards
-wave = -1
+wave = 0
 L:float = WIDTH/5
 M:float = WIDTH/2
 R:float = WIDTH-WIDTH/5
@@ -39,6 +40,7 @@ cards = pygame.sprite.Group()
 font = pygame.font.SysFont("Arial", 30)
 wave_display_surf = font.render("Wave: " + str(wave), True, (255,255,255))
 
+# Fighting loop
 while state == "fight":
     # input map
     for event in pygame.event.get():
@@ -63,6 +65,7 @@ while state == "fight":
     if enemy_group.sprites():
         for i in enemy_group.sprites():
             if i.HP <= 0:
+                i.die(gibgroup)
                 enemy_group.remove(i)
     # spawn new enemy
     else:
@@ -122,11 +125,14 @@ while state == "fight":
     enemy_group.update()
     enemy_group.draw(screen)
 
+    gibgroup.draw(screen)
+
     screen.blit(wave_display_surf, (WIDTH/2,HEIGHT/2+50))
 
     pygame.display.flip()
     clock.tick(60)
 
+    # buffing loop
     while state == "buff":
         
         #input map
