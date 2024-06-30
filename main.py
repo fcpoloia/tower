@@ -40,9 +40,9 @@ cards = pygame.sprite.Group()
 font = pygame.font.SysFont("Arial", 30)
 wave_display_surf = font.render("Wave: " + str(wave), True, (255,255,255))
 
-test_button = HUD.HUDButton(100,100)
+Play_Button = HUD.HUDButton_Play(50,100)
 button_group = pygame.sprite.Group()
-button_group.add(test_button)
+button_group.add(Play_Button)
 
 # Main loop
 while True:
@@ -56,7 +56,7 @@ while True:
                 buttons = button_group.sprites()
                 clicked_button = [c for c in buttons if c.rect.collidepoint(M_POS)]
                 if clicked_button:
-                    clicked_button[0].act()
+                    state = clicked_button[0].act()
              
 
         screen.fill((80, 80, 80))
