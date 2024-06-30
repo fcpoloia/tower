@@ -10,7 +10,7 @@ class upgrade_card(pygame.sprite.Sprite):
 
 class str_upgrade_card(upgrade_card):
     def __init__(self, x:int, y:int):
-        super().__init__("img/strenght_card.png", x, y)
+        super().__init__("img/HUD/strenght_card.png", x, y)
         self.rect = self.image.get_rect()
         self.rect.centerx = x
         self.rect.centery = y
@@ -20,7 +20,7 @@ class str_upgrade_card(upgrade_card):
 
 class frr_upgrade_card(upgrade_card):
     def __init__(self, x:int, y:int):
-        super().__init__("img/firerate_card.png", x, y)
+        super().__init__("img/HUD/firerate_card.png", x, y)
         self.rect = self.image.get_rect()
         self.rect.centerx = x
         self.rect.centery = y
@@ -30,7 +30,7 @@ class frr_upgrade_card(upgrade_card):
 
 class bsp_upgrade_card(upgrade_card):
     def __init__(self, x:int, y:int):
-        super().__init__("img/bulletspeed_card.png",x,y)
+        super().__init__("img/HUD/bulletspeed_card.png",x,y)
         self.rect = self.image.get_rect()
         self.rect.centerx = x
         self.rect.centery = y
