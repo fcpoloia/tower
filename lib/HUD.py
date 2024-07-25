@@ -33,6 +33,7 @@ class HUDButton_Quit(HUDButton):
 class HUDButton_Back(HUDButton):
     def __init__(self,x:int,y:int):
         super().__init__(x,y,"img/HUD/back_button.png")
+        self.image = pygame.transform.scale(self.image,(150,70))
 
     def act(self):
         return "menu"
