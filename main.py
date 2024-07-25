@@ -2,6 +2,7 @@ import pygame
 from lib import PlayerClasses, EnemyClasses, upgrade, HUD
 import random
 import sys
+import json
 
 pygame.init()
 pygame.font.init()
@@ -20,6 +21,8 @@ player = PlayerClasses.Player(1, 1, 100, 1.0, [WIDTH, HEIGHT])
 player_group = pygame.sprite.Group()
 player_group.add(player)
 bullet_group = pygame.sprite.Group()
+with open("data/highscore.json") as HS_file:
+    HSHM = json.load(HS_file)
 
 # Enemies
 pos_enemies = [EnemyClasses.Conscript, EnemyClasses.Tank, EnemyClasses.Runner]
@@ -39,10 +42,20 @@ cards = pygame.sprite.Group()
 # HUD
 font = pygame.font.SysFont("Arial", 30)
 wave_display_surf = font.render("Wave: " + str(wave), True, (255,255,255))
+S_MaxWave = HSHM["max_wave"]
+DS_MaxWave = font.render("Highest round reached: " + str(S_MaxWave), True, (255,255,255))
+S_MaxKills = HSHM["max_kills"]
+DS_MaxKills = font.render("Most kills in a game: " + str(S_MaxKills), True, (255,255,255))
+Stat_DS_group = [DS_MaxWave,DS_MaxKills]
 
 Play_Button = HUD.HUDButton_Play(50,100)
+Stats_Button = HUD.HUDButton_Stats(50,200)
+Quit_Button = HUD.HUDButton_Quit(50,300)
+Back_Button = HUD.HUDButton_Back(50,50)
 button_group = pygame.sprite.Group()
-button_group.add(Play_Button)
+button_group.add(Play_Button,Stats_Button,Quit_Button)
+bbg = pygame.sprite.Group()
+bbg.add(Back_Button)
 
 # Main loop
 while True:
@@ -65,7 +78,30 @@ while True:
         button_group.draw(screen)
 
         pygame.display.flip()
-        clock.tick(60)       
+        clock.tick(60)
+
+    while state == "stats":
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                M_POS = event.pos
+                buttons = bbg.sprites()
+                clicked_button = [c for c in buttons if c.rect.collidepoint(M_POS)]
+                if clicked_button:
+                    state = clicked_button[0].act()
+             
+
+        screen.fill((80,80,80))
+
+        for i in range(len(Stat_DS_group)):
+            screen.blit(Stat_DS_group[i],(50,HEIGHT-500+i*50))
+
+        bbg.update()
+        bbg.draw(screen)
+
+        pygame.display.flip()
+        clock.tick(60)
 
     # Fighting loop
     while state == "fight":
@@ -178,5 +214,8 @@ while True:
         
         pygame.display.flip()
         clock.tick(60)
+    
+    if state == "quit":
+        sys.exit()
 
 pygame.quit()
