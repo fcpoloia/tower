@@ -1,5 +1,10 @@
 import pygame
 
+def draw_progress_bar(x: int, y: int, width: int, height:int, screen, current, maximum, bg, fg):
+    pygame.draw.rect(screen,bg,(x,y,width,height))
+    pygame.draw.rect(screen,fg,(x,y,current/maximum*width,height))
+
+
 class HUDButton(pygame.sprite.Sprite):
     def __init__(self, x:int, y:int, path:str):
         super().__init__()
