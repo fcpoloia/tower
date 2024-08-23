@@ -17,7 +17,7 @@ state = "menu"
 clock = pygame.time.Clock()
 
 # initialize player
-player = PlayerClasses.Player(1, 1, 100, 1.0, [WIDTH, HEIGHT])
+player = PlayerClasses.Player(10, 1, 100, 1.0, [WIDTH, HEIGHT])
 player_group = pygame.sprite.Group()
 player_group.add(player)
 bullet_group = pygame.sprite.Group()
@@ -30,8 +30,9 @@ enemy_group = pygame.sprite.Group()
 sides = ["L", "R", "U", "D"]
 gibgroup = pygame.sprite.Group()
 
-# Cards
 wave = 0
+kills = 0
+# Cards
 L:float = WIDTH/5
 M:float = WIDTH/2
 R:float = WIDTH-WIDTH/5
@@ -42,6 +43,7 @@ cards = pygame.sprite.Group()
 # HUD
 font = pygame.font.SysFont("Arial", 30)
 wave_display_surf = font.render("Wave: " + str(wave), True, (255,255,255))
+kills_display_surf = font.render("Kills: " + str(kills), True, (255,255,255))
 S_MaxWave = HSHM["max_wave"]
 DS_MaxWave = font.render("Highest round reached: " + str(S_MaxWave), True, (255,255,255))
 S_MaxKills = HSHM["max_kills"]
@@ -69,8 +71,7 @@ while True:
                 buttons = button_group.sprites()
                 clicked_button = [c for c in buttons if c.rect.collidepoint(M_POS)]
                 if clicked_button:
-                    state = clicked_button[0].act()
-             
+                    state = clicked_button[0].act()            
 
         screen.fill((80, 80, 80))
 
@@ -103,6 +104,26 @@ while True:
         pygame.display.flip()
         clock.tick(60)
 
+    while state == "dead":
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                M_POS = event.pos
+                buttons = bbg.sprites()
+                clicked_button = [c for c in buttons if c.rect.collidepoint(M_POS)]
+                if clicked_button:
+                    state = clicked_button[0].act()
+
+        wave = 0
+        kills = 0
+ 
+        bbg.update()
+        bbg.draw(screen)
+
+        pygame.display.flip()
+        clock.tick(60)
+
     # Fighting loop
     while state == "fight":
         # input map
@@ -116,8 +137,12 @@ while True:
         player_hit = pygame.sprite.spritecollide(player, enemy_group, False)
         for i in player_hit:
             player.HEALTH -= 1
+            print(player.HEALTH)
             enemy_group.remove(i)
-    
+            if player.HEALTH <= 0:
+                player.death(wave, kills, HSHM)
+                state = "dead"
+   
         bullet_hits = pygame.sprite.groupcollide(bullet_group, enemy_group, False, False)
         for bullet in bullet_hits:
             for enemy in bullet_hits[bullet]:
@@ -126,8 +151,10 @@ while True:
 
         # check for enemies to kill off
         if enemy_group.sprites():
-            for i in enemy_group.sprites():
+            for i in enemy_group.sprites()[:]:
                 if i.HP <= 0:
+                    kills += 1
+                    kills_display_surf = font.render("Kills: " + str(kills), True, (255,255,255))
                     i.die(gibgroup)
                     enemy_group.remove(i)
         # spawn new enemy
@@ -191,6 +218,7 @@ while True:
         enemy_group.draw(screen)
 
         screen.blit(wave_display_surf, (WIDTH/2,HEIGHT/2+50))
+        screen.blit(kills_display_surf,(WIDTH/2,HEIGHT/2+100))
 
         pygame.display.flip()
         clock.tick(60)

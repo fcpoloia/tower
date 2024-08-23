@@ -1,5 +1,6 @@
 import pygame
 import math
+from typing import Dict
 
 ###-------------------------------CLASSES-------------------------------###
 
@@ -7,7 +8,7 @@ import math
 # player
 class Player(pygame.sprite.Sprite):
     def __init__(
-        self, hp: int, dmg: int, attspd: int, bulspd: float, pos: list
+        self, hp=10, dmg=1, attspd=100, bulspd=1.0, pos=[500,325]
     ) -> None:
         pygame.sprite.Sprite.__init__(self)
         self.original_image = pygame.image.load("img/GAME/PlayerImage.png")
@@ -22,6 +23,13 @@ class Player(pygame.sprite.Sprite):
         self.ATTACKSPEED = attspd
         self.delay = 0
         self.BULLETSPEED = bulspd
+
+    def death(self, wave:int, kills:int, hashmap:Dict[str, int]):
+        if hashmap["max_wave"] < wave:
+            hashmap["max_wave"] = wave
+        if hashmap["max_kills"] < kills:
+            hashmap["max_kills"] = kills
+        self.HEALTH = 10
 
     def update(self):
         mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -63,7 +71,7 @@ class Bullet(pygame.sprite.Sprite):
         self.DIRECTION = pygame.Vector2(rel_x, rel_y).normalize()
 
         self.SPEED = spd
-        self.DAMAGE = dmg
+        self.DAMAGE = dmg        
 
     def update(self):
         self.position += self.DIRECTION * self.SPEED
