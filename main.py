@@ -37,7 +37,7 @@ L:float = WIDTH/5
 M:float = WIDTH/2
 R:float = WIDTH-WIDTH/5
 sequance = [L,M,R]
-pos_cards = [upgrade.str_upgrade_card,upgrade.frr_upgrade_card,upgrade.bsp_upgrade_card]
+pos_cards = [upgrade.str_upgrade_card,upgrade.frr_upgrade_card,upgrade.bsp_upgrade_card,upgrade.heal_card,upgrade.max_health_card]
 cards = pygame.sprite.Group()
 
 # HUD
@@ -137,7 +137,6 @@ while True:
         player_hit = pygame.sprite.spritecollide(player, enemy_group, False)
         for i in player_hit:
             player.HEALTH -= 1
-            print(player.HEALTH)
             enemy_group.remove(i)
             if player.HEALTH <= 0:
                 player.death(wave, kills, HSHM)
