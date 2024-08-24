@@ -8,6 +8,16 @@ class upgrade_card(pygame.sprite.Sprite):
         self.rect.centerx = x
         self.rect.centery = y
 
+class heal_card(upgrade_card):
+    def __init__(self, x:int, y:int):
+        super().__init__("img/HUD/heal_card.png", x, y)
+        self.rect = self.image.get_rect()
+        self.rect.centerx = x
+        self.rect.centery = y
+
+    def upgrd(self, player):
+        player.HEALTH += 1
+
 class str_upgrade_card(upgrade_card):
     def __init__(self, x:int, y:int):
         super().__init__("img/HUD/strenght_card.png", x, y)
