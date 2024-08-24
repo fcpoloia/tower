@@ -220,6 +220,7 @@ while True:
         screen.blit(kills_display_surf,(WIDTH/2,HEIGHT/2+100))
 
         HUD.draw_progress_bar(int(WIDTH/2-40),int(HEIGHT/2-30),80,15,screen,player.delay,player.ATTACKSPEED,(80,165,80),(80,255,80))
+        HUD.draw_progress_bar(int(WIDTH/2-40),int(HEIGHT/2-45),80,15,screen,player.HEALTH,player.MAX_HEALTH,(165,80,80),(255,80,80))
 
         pygame.display.flip()
         clock.tick(60)
