@@ -19,6 +19,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = (pos[0] / 2, pos[1] / 2)
 
         self.HEALTH = hp
+        self.MAX_HEALTH = hp
         self.DAMAGE = dmg
         self.ATTACKSPEED = attspd
         self.delay = 0
@@ -40,6 +41,9 @@ class Player(pygame.sprite.Sprite):
 
         if self.delay:
             self.delay -= 1
+
+        if self.HEALTH > self.MAX_HEALTH:
+            self.HEALTH = self.MAX_HEALTH
 
     def fire(self, bulgrp: pygame.sprite.Group):
         if self.delay:
