@@ -2,7 +2,7 @@ import pygame
 import pygame.locals
 
 class Gibs(pygame.sprite.Sprite):
-    def __init__(self, position: list[int,int]):
+    def __init__(self, position: list[int]):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load("img/GAME/gibs.png")
         self.image = pygame.transform.scale(self.image, (30, 30))
