@@ -1,4 +1,5 @@
 import pygame
+import json
 import math
 from typing import Dict
 
@@ -30,7 +31,8 @@ class Player(pygame.sprite.Sprite):
             hashmap["max_wave"] = wave
         if hashmap["max_kills"] < kills:
             hashmap["max_kills"] = kills
-        self.HEALTH = 10
+        with open("data/highscore.json","w") as f:
+           json.dump(hashmap,f) 
 
     def update(self):
         mouse_x, mouse_y = pygame.mouse.get_pos()

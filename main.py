@@ -117,6 +117,10 @@ while True:
 
         wave = 0
         kills = 0
+        player.MAX_HEALTH = 10
+        player.HEALTH = 10
+        gibgroup.empty()
+        enemy_group.empty()
  
         bbg.update()
         bbg.draw(screen)
