@@ -16,6 +16,25 @@ class AbilityBase(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
+class SlowDown(AbilityBase):
+    def __init__(self, x: int, y: int, level:int, cd:int) -> None:
+        super().__init__(x, y, "img/GAME/SlowIcon.png")
+        self.LEVEL = level
+        self.CD = cd
+        self.CD_current = cd
+        self.power = 1/self.LEVEL
+        if self.power >= 1:
+            self.power = .85
+
+    def effect(self, enemy_group, player):
+        enemies = enemy_group.sprites()
+        for i in enemies:
+            i.SPD = i.SPD*self.power
+
+    def level_up(self):
+        self.LEVEL += 1
+        self.power = 1/self.LEVEL
+
 
 # player
 class Player(pygame.sprite.Sprite):
