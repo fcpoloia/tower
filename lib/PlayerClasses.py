@@ -6,6 +6,17 @@ from typing import Dict
 ###-------------------------------CLASSES-------------------------------###
 
 
+# abilities
+class AbilityBase(pygame.sprite.Sprite):
+    def __init__(self, x: int, y: int, path: str) -> None:
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load(path)
+        self.image = pygame.transform.scale(self.image, (50, 50))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+
 # player
 class Player(pygame.sprite.Sprite):
     def __init__(self, hp=10, dmg=1, attspd=100, bulspd=1.0, pos=[500, 325]) -> None:
