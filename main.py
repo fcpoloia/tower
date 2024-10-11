@@ -32,10 +32,10 @@ gibgroup = pygame.sprite.Group()
 
 wave = 0
 kills = 0
-# Cards
 L: float = WIDTH / 5
 M: float = WIDTH / 2
 R: float = WIDTH - WIDTH / 5
+# Cards
 sequance = [L, M, R]
 pos_cards = [
     upgrade.str_upgrade_card,
@@ -45,6 +45,11 @@ pos_cards = [
     upgrade.max_health_card,
 ]
 cards = pygame.sprite.Group()
+
+# Abilities
+test_ab = PlayerClasses.SlowDown(30, HEIGHT - 80, 1, 600)
+abgroup = pygame.sprite.Group()
+abgroup.add(test_ab)
 
 # HUD
 font = pygame.font.SysFont("Arial", 30)
@@ -144,7 +149,10 @@ while True:
             if event.type == pygame.QUIT:
                 sys.exit()
             keys = pygame.key.get_pressed()
-            if any(keys):
+            if keys[pygame.K_1]:
+                ablis = abgroup.sprites()
+                ablis[0].effect(enemy_group, player)
+            elif any(keys):
                 player.fire(bullet_group)
         # collision detection
         player_hit = pygame.sprite.spritecollide(player, enemy_group, False)
@@ -240,6 +248,9 @@ while True:
 
         enemy_group.update()
         enemy_group.draw(screen)
+
+        abgroup.update()
+        abgroup.draw(screen)
 
         screen.blit(wave_display_surf, (WIDTH / 2, HEIGHT / 2 + 50))
         screen.blit(kills_display_surf, (WIDTH / 2, HEIGHT / 2 + 100))

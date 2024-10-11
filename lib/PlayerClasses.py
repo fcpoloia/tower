@@ -8,32 +8,42 @@ from typing import Dict
 
 # abilities
 class AbilityBase(pygame.sprite.Sprite):
-    def __init__(self, x: int, y: int, path: str) -> None:
+    def __init__(self, x: int, y: int, path: str, cd: int, level: int) -> None:
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(path)
         self.image = pygame.transform.scale(self.image, (50, 50))
         self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+        self.rect.topleft = (x, y)
 
-class SlowDown(AbilityBase):
-    def __init__(self, x: int, y: int, level:int, cd:int) -> None:
-        super().__init__(x, y, "img/GAME/SlowIcon.png")
         self.LEVEL = level
         self.CD = cd
         self.CD_current = cd
-        self.power = 1/self.LEVEL
-        if self.power >= 1:
-            self.power = .85
-
-    def effect(self, enemy_group, player):
-        enemies = enemy_group.sprites()
-        for i in enemies:
-            i.SPD = i.SPD*self.power
 
     def level_up(self):
         self.LEVEL += 1
-        self.power = 1/self.LEVEL
+        self.power = 1 / self.LEVEL
+
+    def update(self) -> None:
+        if self.CD_current > 0:
+            self.CD_current -= 1
+
+    def effect(self, enemy_group, player):
+        print("ABILITY BASE.")
+
+
+class SlowDown(AbilityBase):
+    def __init__(self, x: int, y: int, level: int, cd: int) -> None:
+        super().__init__(x, y, "img/GAME/SlowIcon.png", cd, level)
+        self.power = 1 / self.LEVEL
+        if self.power >= 1:
+            self.power = 0.85
+
+    def effect(self, enemy_group, player):
+        if self.CD_current <= 0:
+            enemies = enemy_group.sprites()
+            for i in enemies:
+                i.SPD = i.SPD * self.power
+            self.CD_current = self.CD
 
 
 # player
