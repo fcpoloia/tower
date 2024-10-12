@@ -47,7 +47,7 @@ pos_cards = [
 cards = pygame.sprite.Group()
 
 # Abilities
-test_ab = PlayerClasses.SlowDown(30, HEIGHT - 80, 1, 600)
+test_ab = PlayerClasses.SlowDown(30, HEIGHT - 80, 3, 600, screen)
 abgroup = pygame.sprite.Group()
 abgroup.add(test_ab)
 
@@ -249,7 +249,9 @@ while True:
         enemy_group.update()
         enemy_group.draw(screen)
 
-        abgroup.update()
+        for i in abgroup.sprites():
+            i.update()
+            
         abgroup.draw(screen)
 
         screen.blit(wave_display_surf, (WIDTH / 2, HEIGHT / 2 + 50))

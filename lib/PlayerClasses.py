@@ -2,13 +2,14 @@ import pygame
 import json
 import math
 from typing import Dict
+import HUD
 
 ###-------------------------------CLASSES-------------------------------###
 
 
 # abilities
 class AbilityBase(pygame.sprite.Sprite):
-    def __init__(self, x: int, y: int, path: str, cd: int, level: int) -> None:
+    def __init__(self, x: int, y: int, path: str, cd: int, level: int, screen) -> None:
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(path)
         self.image = pygame.transform.scale(self.image, (50, 50))
@@ -18,6 +19,7 @@ class AbilityBase(pygame.sprite.Sprite):
         self.LEVEL = level
         self.CD = cd
         self.CD_current = cd
+        self.screen = screen
 
     def level_up(self):
         self.LEVEL += 1
@@ -26,14 +28,25 @@ class AbilityBase(pygame.sprite.Sprite):
     def update(self) -> None:
         if self.CD_current > 0:
             self.CD_current -= 1
+        HUD.draw_progress_bar(
+            self.rect.topleft[0],
+            self.rect.topleft[1] - 10,
+            50,
+            10,
+            self.screen,
+            self.CD_current,
+            self.CD,
+            "blue",
+            "red"
+        )
 
     def effect(self, enemy_group, player):
         print("ABILITY BASE.")
 
 
 class SlowDown(AbilityBase):
-    def __init__(self, x: int, y: int, level: int, cd: int) -> None:
-        super().__init__(x, y, "img/GAME/SlowIcon.png", cd, level)
+    def __init__(self, x: int, y: int, level: int, cd: int, screen) -> None:
+        super().__init__(x, y, "img/GAME/SlowIcon.png", cd, level, screen)
         self.power = 1 / self.LEVEL
         if self.power >= 1:
             self.power = 0.85
@@ -44,6 +57,25 @@ class SlowDown(AbilityBase):
             for i in enemies:
                 i.SPD = i.SPD * self.power
             self.CD_current = self.CD
+
+
+class Nuke(AbilityBase):
+    def __init__(self, x: int, y: int, cd: int, level: int, screen) -> None:
+        super().__init__(x, y, "img/GAME/NukeIcon.png", cd, level, screen)
+        self.power = level
+
+    def effect(self, enemy_group, player):
+        if self.CD_current <= 0:
+            enemies = enemy_group.sprites()
+            for i in enemies:
+                i.HP -= 1
+        self.CD_current = self.CD
+
+
+class Heal(AbilityBase):
+    def __init__(self, x: int, y: int, cd: int, level: int, screen) -> None:
+        super().__init__(x, y, "img/GAME/HealIcon.png", cd, level, screen)
+        self.power
 
 
 # player
