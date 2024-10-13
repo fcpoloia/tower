@@ -2,7 +2,7 @@ import pygame
 import json
 import math
 from typing import Dict
-import HUD
+import lib.HUD as HUD
 
 ###-------------------------------CLASSES-------------------------------###
 
@@ -37,7 +37,7 @@ class AbilityBase(pygame.sprite.Sprite):
             self.CD_current,
             self.CD,
             "blue",
-            "red"
+            "red",
         )
 
     def effect(self, enemy_group, player):
@@ -45,7 +45,7 @@ class AbilityBase(pygame.sprite.Sprite):
 
 
 class SlowDown(AbilityBase):
-    def __init__(self, x: int, y: int, level: int, cd: int, screen) -> None:
+    def __init__(self, x: int, y: int, cd: int, level: int, screen) -> None:
         super().__init__(x, y, "img/GAME/SlowIcon.png", cd, level, screen)
         self.power = 1 / self.LEVEL
         if self.power >= 1:
@@ -68,14 +68,22 @@ class Nuke(AbilityBase):
         if self.CD_current <= 0:
             enemies = enemy_group.sprites()
             for i in enemies:
-                i.HP -= 1
+                i.HP -= self.power
         self.CD_current = self.CD
 
 
 class Heal(AbilityBase):
     def __init__(self, x: int, y: int, cd: int, level: int, screen) -> None:
         super().__init__(x, y, "img/GAME/HealIcon.png", cd, level, screen)
-        self.power
+        self.power = self.layer * 0.10
+
+    def effect(self, enemy_group, player):
+        if self.CD_current <= 0:
+            to_heal = (player.MAX_HEALTH - player.HEALTH) * self.power
+            to_heal = math.ceil(to_heal)
+            player.HEALTH += to_heal
+            if player.MAX_HEALTH < player.HEALTH:
+                player.HEALTH = player.MAX_HEALTH
 
 
 # player

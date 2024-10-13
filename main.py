@@ -47,7 +47,7 @@ pos_cards = [
 cards = pygame.sprite.Group()
 
 # Abilities
-test_ab = PlayerClasses.SlowDown(30, HEIGHT - 80, 3, 600, screen)
+test_ab = PlayerClasses.Nuke(30, HEIGHT - 80, 600, 3, screen)
 abgroup = pygame.sprite.Group()
 abgroup.add(test_ab)
 
@@ -152,6 +152,12 @@ while True:
             if keys[pygame.K_1]:
                 ablis = abgroup.sprites()
                 ablis[0].effect(enemy_group, player)
+            elif keys[pygame.K_TAB]:
+                ablis = abgroup.sprites()
+                abgroup.add(
+                        PlayerClasses.SlowDown(
+                            ablis[-1].rect.topleft[0] + 80, HEIGHT - 80, 600, 1, screen
+                            ))
             elif any(keys):
                 player.fire(bullet_group)
         # collision detection
@@ -251,7 +257,7 @@ while True:
 
         for i in abgroup.sprites():
             i.update()
-            
+
         abgroup.draw(screen)
 
         screen.blit(wave_display_surf, (WIDTH / 2, HEIGHT / 2 + 50))
