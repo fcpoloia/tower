@@ -75,7 +75,7 @@ class Nuke(AbilityBase):
 class Heal(AbilityBase):
     def __init__(self, x: int, y: int, cd: int, level: int, screen) -> None:
         super().__init__(x, y, "img/GAME/HealIcon.png", cd, level, screen)
-        self.power = self.layer * 0.10
+        self.power = level * 0.10
 
     def effect(self, enemy_group, player):
         if self.CD_current <= 0:
@@ -84,6 +84,7 @@ class Heal(AbilityBase):
             player.HEALTH += to_heal
             if player.MAX_HEALTH < player.HEALTH:
                 player.HEALTH = player.MAX_HEALTH
+        self.CD_current = self.CD
 
 
 # player
