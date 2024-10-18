@@ -51,17 +51,21 @@ test_ab = PlayerClasses.Nuke(30, HEIGHT - 80, 600, 3, screen)
 abgroup = pygame.sprite.Group()
 abgroup.add(test_ab)
 
+
 def add_ab(group: pygame.sprite.Group):
     pos_ab = [PlayerClasses.SlowDown, PlayerClasses.Heal, PlayerClasses.Nuke]
     lis = group.sprites()
     if len(lis) <= 10:
         group.add(
-                random.choice(pos_ab)(lis[-1].rect.topleft[0] + 80,
-                                      HEIGHT - 80,
-                                      random.randint(400, 800),
-                                      random.randint(1, 3),
-                                      screen)
-                )
+            random.choice(pos_ab)(
+                lis[-1].rect.topleft[0] + 80,
+                HEIGHT - 80,
+                random.randint(400, 800),
+                random.randint(1, 3),
+                screen,
+            )
+        )
+
 
 # HUD
 font = pygame.font.SysFont("Arial", 30)
