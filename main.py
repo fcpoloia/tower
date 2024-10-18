@@ -54,13 +54,14 @@ abgroup.add(test_ab)
 def add_ab(group: pygame.sprite.Group):
     pos_ab = [PlayerClasses.SlowDown, PlayerClasses.Heal, PlayerClasses.Nuke]
     lis = group.sprites()
-    group.add(
-            random.choice(pos_ab)(lis[-1].rect.topleft[0] + 80,
-                                  HEIGHT - 80,
-                                  random.randint(400, 800),
-                                  random.randint(1, 3),
-                                  screen)
-            )
+    if len(lis) <= 10:
+        group.add(
+                random.choice(pos_ab)(lis[-1].rect.topleft[0] + 80,
+                                      HEIGHT - 80,
+                                      random.randint(400, 800),
+                                      random.randint(1, 3),
+                                      screen)
+                )
 
 # HUD
 font = pygame.font.SysFont("Arial", 30)
@@ -160,13 +161,41 @@ while True:
             if event.type == pygame.QUIT:
                 sys.exit()
             keys = pygame.key.get_pressed()
-            if keys[pygame.K_1]:
-                ablis = abgroup.sprites()
-                ablis[0].effect(enemy_group, player)
-            elif keys[pygame.K_TAB]:
-                add_ab(abgroup)
-            elif any(keys):
-                player.fire(bullet_group)
+            try:
+                if keys[pygame.K_1]:
+                    ablis = abgroup.sprites()
+                    ablis[0].effect(enemy_group, player)
+                elif keys[pygame.K_2]:
+                    ablis = abgroup.sprites()
+                    ablis[1].effect(enemy_group, player)
+                elif keys[pygame.K_3]:
+                    ablis = abgroup.sprites()
+                    ablis[2].effect(enemy_group, player)
+                elif keys[pygame.K_4]:
+                    ablis = abgroup.sprites()
+                    ablis[3].effect(enemy_group, player)
+                elif keys[pygame.K_5]:
+                    ablis = abgroup.sprites()
+                    ablis[4].effect(enemy_group, player)
+                elif keys[pygame.K_6]:
+                    ablis = abgroup.sprites()
+                    ablis[5].effect(enemy_group, player)
+                elif keys[pygame.K_7]:
+                    ablis = abgroup.sprites()
+                    ablis[6].effect(enemy_group, player)
+                elif keys[pygame.K_8]:
+                    ablis = abgroup.sprites()
+                    ablis[7].effect(enemy_group, player)
+                elif keys[pygame.K_9]:
+                    ablis = abgroup.sprites()
+                    ablis[8].effect(enemy_group, player)
+                elif keys[pygame.K_0]:
+                    ablis = abgroup.sprites()
+                    ablis[9].effect(enemy_group, player)
+                elif any(keys):
+                    player.fire(bullet_group)
+            except IndexError:
+                pass
         # collision detection
         player_hit = pygame.sprite.spritecollide(player, enemy_group, False)
         for i in player_hit:
@@ -237,6 +266,8 @@ while True:
                 state = "buff"
                 for i in range(3):
                     cards.add(random.choice(pos_cards)(sequance[i], 300))
+            if wave % 5 == 0:
+                add_ab(abgroup)
 
         # check for bullets out of bounds
         for bullet in bullet_group.sprites():
